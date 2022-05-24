@@ -45,7 +45,6 @@ export default function App(props) {
           <Toggle onChange={() => toggleChange(2)} label="열혈팬" value={toggle[2]} />
           <Toggle onChange={() => toggleChange(3)} label="구독자" value={toggle[3]} />
           <Toggle onChange={() => toggleChange(4)} label="팬" value={toggle[4]} />
-          <Toggle toggleChange={toggleChange} />
         </ul>
         <div>삭제하려면 닉네임을 클릭하세요</div>
         <input ref={nickInput} id="nickname-input" type="text" placeholder="닉네임을 입력하세요" />
