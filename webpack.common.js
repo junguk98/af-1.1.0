@@ -1,5 +1,5 @@
 const path = require('path');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -12,6 +12,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
+    assetModuleFilename: '[name][ext]',
   },
   module: {
     rules: [
@@ -21,10 +22,10 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg)$/,
+        test: /\.(png|jpg|jpeg|gif|svg|json)$/,
         type: 'asset/resource',
       },
     ],
   },
-  plugins: [],
+  plugins: [new CleanWebpackPlugin()],
 };

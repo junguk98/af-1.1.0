@@ -20,6 +20,7 @@ module.exports = merge(common, {
   plugins: [
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
+      excludeChunks: ['content'],
       template: './src/index.html',
       templateParameters: {
         mode: 'PROD',

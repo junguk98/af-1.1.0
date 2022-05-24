@@ -1,34 +1,18 @@
 import React from 'react';
 import App from './App';
-import Browser from 'webextension-polyfill';
-
 import { createRoot } from 'react-dom/client';
+import '../public/manifest.json';
+import '../public/logo.png';
+import { getNicks, getBlackNicks, getToggle } from './hooks/getStorageData';
+
 const container = document.getElementById('root');
-const root = createRoot(container); // createRoot(container!) if you use TypeScript
-
-const getNicks = async (data) => {
-  const res = await Browser.storage.local.get(data);
-  if (res.nicks) return res.nicks;
-  else return [];
-};
-
-const getBlackNicks = async (data) => {
-  const res = await Browser.storage.local.get(data);
-  if (res.blackNicks) return res.blackNicks;
-  else return [];
-};
-
-const getToggle = async (data) => {
-  const res = await Browser.storage.local.get(data);
-  if (res.toggle) return res.toggle;
-  else return [false, false, false, false, false];
-};
+const root = createRoot(container);
 
 (async () => {
   try {
-    const nicks = await getNicks('nicks');
-    const blackNicks = await getBlackNicks('blackNicks');
-    const toggle = await getToggle('toggle');
+    const nicks = await getNicks();
+    const blackNicks = await getBlackNicks();
+    const toggle = await getToggle();
     root.render(<App nicks={nicks} blackNicks={blackNicks} toggle={toggle} />);
   } catch (e) {}
 })();
