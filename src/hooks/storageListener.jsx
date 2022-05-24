@@ -1,27 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Browser from 'webextension-polyfill';
 import { getBlackNicks, getNicks, getToggle } from './getStorageData';
 
 export default function storageListener() {
-  const [filter, setFilter] = useState(async () => {
-    return {
-      toggle: await getToggle(),
-      nicks: await getNicks(),
-      blackNicks: await getBlackNicks(),
+  const [filter, setFilter] = useState({});
+
+  useEffect((e) => {
+    const getFilter = async () => {
+      const toggle = await getToggle();
+      const nicks = await getNicks();
+      const blackNicks = await getBlackNicks();
+      return {
+        toggle,
+        nicks,
+        blackNicks,
+      };
     };
-  });
 
-  const filterUpdate = async () => {
-    setFilter({
-      toggle: await getToggle(),
-      nicks: await getNicks(),
-      blackNicks: await getBlackNicks(),
+    const filterInit = async () => {
+      setFilter(await getFilter());
+    };
+
+    filterInit();
+
+    const filterUpdate = async () => {
+      setFilter(await getFilter());
+    };
+
+    Browser.storage.onChanged.addListener(async () => {
+      console.log('filter update');
+      await filterUpdate();
+      // window.location.reload();
     });
-  };
-
-  Browser.storage.onChanged.addListener(async () => {
-    await filterUpdate();
-  });
+  }, []);
 
   return filter;
 }

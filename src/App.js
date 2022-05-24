@@ -18,7 +18,7 @@ export default function App(props) {
     nickInput.current.value = '';
   };
 
-  const delBtnClick = () => {
+  const blackBtnClick = () => {
     if (nickInput.current.value === '' || blackNicks.includes(nickInput.current.value)) return;
     const newNicks = [...blackNicks, nickInput.current.value];
     Browser.storage.local.set({ blackNicks: newNicks });
@@ -31,6 +31,18 @@ export default function App(props) {
     newToggle[idx] = !newToggle[idx];
     Browser.storage.local.set({ toggle: newToggle });
     setToggle(newToggle);
+  };
+
+  const nickClick = (e) => {
+    const newNicks = nicks.filter((item) => item !== e.target.innerHTML);
+    Browser.storage.local.set({ nicks: newNicks });
+    setNicks(newNicks);
+  };
+
+  const blackNickClick = (e) => {
+    const newBlackNicks = blackNicks.filter((item) => item !== e.target.innerHTML);
+    Browser.storage.local.set({ blackNicks: newBlackNicks });
+    setBlackNicks(newBlackNicks);
   };
 
   return (
@@ -52,17 +64,17 @@ export default function App(props) {
         <button onClick={addBtnClick} id="add-btn">
           추가하기
         </button>
-        <button onClick={delBtnClick} id="del-btn">
+        <button onClick={blackBtnClick} id="del-btn">
           블랙리스트 추가하기
         </button>
         <div className="nickname-container">
           <div className="nicknames">
-            <Nickname nick={nicks}>
+            <Nickname nick={nicks} onClick={nickClick}>
               <span>추가됨</span>
             </Nickname>
           </div>
           <div className="nicknames">
-            <Nickname nick={blackNicks}>
+            <Nickname nick={blackNicks} onClick={blackNickClick}>
               <span>블랙리스트</span>
             </Nickname>
           </div>

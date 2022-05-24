@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Chats from './Chats';
 
 export default function Mycontent({ chatBox, origBox, myBox }) {
@@ -15,7 +15,7 @@ export default function Mycontent({ chatBox, origBox, myBox }) {
   useEffect(() => {
     myBox.style.height = '200px';
     origBox.style.top = '250px';
-    myHr.current.style.top = '300px';
+    myHr.current.style.top = '305px';
     $chatToggleButton.addEventListener('click', () => {
       if ($target.style.display === 'none') {
         $target.style.display = 'inline';
@@ -33,16 +33,17 @@ export default function Mycontent({ chatBox, origBox, myBox }) {
     });
     chatBox.addEventListener('mousemove', (e) => {
       if (!resize) return;
-      const mouseY = e.clientY - 100;
-      myHr.current.style.top = mouseY + 100 + 'px';
+      const mouseY = e.clientY - 50 - chatBox.getBoundingClientRect().top;
       myBox.style.height = mouseY + 'px';
       origBox.style.top = mouseY + 50 + 'px';
+      const relativeTop = origBox.getBoundingClientRect().top;
+      myHr.current.style.top = relativeTop + 'px';
     });
   }, []);
 
   return (
     <>
-      <Chats />
+      <Chats origBox={origBox} myBox={myBox} config={{ childList: true, subtree: true }} />
       <hr ref={myHr} className="sethr" />
     </>
   );
