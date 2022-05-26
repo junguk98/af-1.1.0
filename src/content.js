@@ -58,7 +58,9 @@ function setup() {
 
 function filterUpdate() {
   Browser.storage.local.get('toggle').then((res) => {
-    toggle = res.toggle;
+    if (res.toggle) {
+      toggle = res.toggle;
+    } else toggle = [false, false, false, false, false];
   });
   Browser.storage.local.get('nicks').then((res) => {
     if (res.nicks) {
@@ -74,21 +76,26 @@ function filterUpdate() {
 
 function filter(chat) {
   if (!chat) return false;
-  let nickname = chat.querySelector('a').innerHTML;
+  let flag = 0;
+  let nickname = chat.querySelector('a').innerHTML.toString();
+  console.log(nicks, blackNicks, nickname);
   nicks.forEach((e) => {
     if (e.toString() === nickname) {
-      return true;
+      flag = 1;
+      return;
     }
   });
   blackNicks.forEach((e) => {
     if (e.toString() === nickname) {
-      return true;
+      flag = -1;
+      return;
     }
   });
+  if (flag === 1) return true;
+  else if (flag === -1) return false;
 
   let image = chat.getElementsByTagName('img');
   if (!image) return false;
-  let flag = 0;
   [...image].forEach((elem) => {
     if (elem.alt === 'BJ' && toggle[0]) {
       flag = 1;
